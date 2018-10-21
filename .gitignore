@@ -1,0 +1,12 @@
+*.pyc
+*.swo
+*.swp
+*.log
+logs
+config.py
+app/static/node_modules/
+app/static/resource/
+venv
+__pycache__
+.idea
+.vscode

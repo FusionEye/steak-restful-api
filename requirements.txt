@@ -1,0 +1,11 @@
+Flask==0.12.2
+Flask-Script==2.0.6
+jinja2>=2.10
+markupSafe==0.23
+werkzeug==0.11.15
+Pillow==5.0.0
+readability-lxml==0.6.2
+requests==2.18.4
+simplejson==3.13.2
+urllib3==1.22
+visitor==0.1.3
