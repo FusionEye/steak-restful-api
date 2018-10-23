@@ -2,11 +2,12 @@
 
 from flask import Flask, make_response
 from app import init_app
-from app.api import api_v1p0
+from app.api import ros_api, SteakResponse
 from app.exceptions import *
 
 app = Flask(__name__)
-app.register_blueprint(api_v1p0.api)
+app.response_class = SteakResponse
+app.register_blueprint(ros_api.api)
 
 
 @app.errorhandler(NotFoundException)

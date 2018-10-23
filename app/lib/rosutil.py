@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import rospy
 import rosbag
+import rospy
 from sensor_msgs.msg import PointCloud2
 
 bag = rosbag.Bag('hokuyo.bag', 'w')
@@ -22,4 +22,4 @@ def record(topic='/hokuyo_points'):
 
 
 def close():
-    rospy.signal_shutdown()
+    rospy.signal_shutdown('ros node shutdown')

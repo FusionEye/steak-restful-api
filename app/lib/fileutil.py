@@ -67,8 +67,12 @@ def get_ros_bag_files(path):
     files = os.listdir(path)
     result = []
     for file in files:
-        if not os.path.isdir(file):
-            f = open(path + "/" + file)
-            result.append(f.name)
-    print(result)
+        file_path = os.path.join(path, file)
+        if not os.path.isdir(file_path):
+            if os.path.splitext(file_path)[0] == '.bag':
+                result.append({
+                    'fileName':file,
+                    'path':file_path
+                })
+    print result
     return result
