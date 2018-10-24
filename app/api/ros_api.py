@@ -18,9 +18,15 @@ def validate_json(json):
         raise NoJsonException()
 
 
+@api.route('/launch/start', method=['GET', 'POST'])
+def ros_launch_start():
+    rosutil.launch_start('test.launch')
+    return ResponseModel.ok('launch start')
+
+
 @api.route('/record', methods=['GET'])
 def ros_record():
-    test = {"test": "aaa"}
+    rosutil.record()
     return ResponseModel.ok(test)
 
 
