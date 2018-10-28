@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, make_response
-from app import init_app
+from flask import make_response
+from app import create_app
 from app.api import ros_api, SteakResponse
+from app.logging import Logging
 from app.exceptions import *
+import os
 
-app = Flask(__name__)
+app = create_app(os.getenv('FLASK_CONFIG') or 'dev')
 app.response_class = SteakResponse
 app.register_blueprint(ros_api.api)
 
@@ -30,5 +32,6 @@ def bad_request(error):
 
 
 if __name__ == '__main__':
-    init_app(app)
-    app.run(debug=True)
+    Logging.init_app('./log/app')
+    Logging.init_app('./log/app', app.logger)
+    app.run()

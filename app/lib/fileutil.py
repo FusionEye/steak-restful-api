@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import time
 import shutil
 import uuid
 
@@ -63,16 +64,32 @@ def isfile(file):
     return os.path.isfile(file)
 
 
+def get_file_size(filePath):
+    filePath = unicode(filePath,'utf8')
+    fsize = os.path.getsize(filePath)
+    fsize = fsize/float(1024*1024)
+    return round(fsize, 3)
+
+
+def get_file_create_time(filePath):
+    filePath = unicode(filePath, 'utf8')
+    t = os.path.getctime(filePath)
+    timeStruct = time.localtime(t)
+    return time.strftime('%Y-%m-%d %H:%M:%S',timeStruct)
+
+
 def get_ros_bag_files(path):
     files = os.listdir(path)
     result = []
     for file in files:
         file_path = os.path.join(path, file)
         if not os.path.isdir(file_path):
-            if os.path.splitext(file_path)[0] == '.bag':
+            if os.path.splitext(file_path)[1] == '.bag':
                 result.append({
-                    'fileName':file,
-                    'path':file_path
+                    'fileName': file,
+                    'path': file_path,
+                    'size': get_file_size(file_path),
+                    'createTime': get_file_create_time(file_path)
                 })
     print result
     return result

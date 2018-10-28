@@ -2,7 +2,7 @@ flask>=0.12.3
 flask-Script>=2.0.6
 jinja2>=2.10
 markupSafe==0.23
-werkzeug==0.11.15
+werkzeug>=0.14
 Pillow==5.0.0
 readability-lxml==0.6.2
 requests==2.18.4

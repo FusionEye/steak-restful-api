@@ -2,7 +2,8 @@
 
 import logging
 import rospy
-from flask import Blueprint, Flask, send_from_directory
+import os
+from flask import Blueprint, Flask, send_from_directory, current_app
 
 from app.exceptions import NoJsonException
 from app.lib import rosutil, fileutil
@@ -18,7 +19,7 @@ def validate_json(json):
         raise NoJsonException()
 
 
-@api.route('/launch/start', method=['GET', 'POST'])
+@api.route('/launch/start', methods=['GET', 'POST'])
 def ros_launch_start():
     rosutil.launch_start('test.launch')
     return ResponseModel.ok('launch start')
@@ -27,7 +28,7 @@ def ros_launch_start():
 @api.route('/record', methods=['GET'])
 def ros_record():
     rosutil.record()
-    return ResponseModel.ok(test)
+    return ResponseModel.ok()
 
 
 @api.route('/close', methods=['GET', 'POST'])
@@ -39,10 +40,12 @@ def ros_record_close():
 
 @api.route('/download/<filename>', methods=['GET', 'POST'])
 def download_ros_record_file(filename):
-    dirpath = os.path.join(app.root_path, 'upload')
+    bag_dir = current_app.config.get('BAG_DIR')
+    dirpath = os.path.join(app.root_path, bag_dir)
     return send_from_directory(dirpath, filename, as_attachment=True)
 
 
 @api.route('/list', methods=['GET', 'POST'])
 def get_record_files():
-    return ResponseModel.ok(fileutil.get_ros_bag_files('/data'))
+    bag_dir = current_app.config.get('BAG_DIR')
+    return ResponseModel.ok(fileutil.get_ros_bag_files(bag_dir))
