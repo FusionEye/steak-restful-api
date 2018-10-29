@@ -4,9 +4,9 @@ import logging
 import rospy
 import os
 from flask import Blueprint, Flask, send_from_directory, current_app
-
+from app.lib import fileutil
 from app.exceptions import NoJsonException
-from app.lib import rosutil, fileutil
+from app.lib.ros import RosCommon
 from app.model import ResponseModel
 
 app = Flask(__name__)
@@ -21,20 +21,26 @@ def validate_json(json):
 
 @api.route('/launch/start', methods=['GET', 'POST'])
 def ros_launch_start():
-    rosutil.launch_start('test.launch')
+    try:
+        RosCommon().launch_start('test.launch')
+    except Exception, e:
+        return ResponseModel.error(e.message)
     return ResponseModel.ok('launch start')
 
 
 @api.route('/record', methods=['GET'])
 def ros_record():
-    rosutil.record()
-    return ResponseModel.ok()
+    try:
+        RosCommon().record()
+    except Exception, e:
+        return ResponseModel.error(e.message)
+    return ResponseModel.ok('ros record done!')
 
 
 @api.route('/close', methods=['GET', 'POST'])
 def ros_record_close():
     while not rospy.is_shutdown():
-        rosutil.close()
+        RosCommon().close()
     return ResponseModel.msg('ros record closed!')
 
 
