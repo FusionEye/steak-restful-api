@@ -14,6 +14,7 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
+    DEBUG = True
     BAG_DIR = '/data/'
 
 

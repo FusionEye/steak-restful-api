@@ -52,6 +52,11 @@ class RosCommon:
         launch.shutdown()
 
     @staticmethod
+    def hokuyo_launch():
+        args = ['roslaunch', 'spin_hokuyo', 'tilt_continuous.launch']
+        roslaunch.main(args)
+
+    @staticmethod
     def core_start():
         parent = ROSLaunchParent('core', [], is_core=True)
         parent.start()

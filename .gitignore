@@ -3,6 +3,7 @@
 *.swp
 *.log
 logs
+log
 app/static/node_modules/
 app/static/resource/
 venv

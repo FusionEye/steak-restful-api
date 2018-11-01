@@ -34,4 +34,4 @@ def bad_request(error):
 if __name__ == '__main__':
     Logging.init_app('./log/app')
     Logging.init_app('./log/app', app.logger)
-    app.run()
+    app.run(host='0.0.0.0')
