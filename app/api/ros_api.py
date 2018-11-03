@@ -3,6 +3,7 @@
 import logging
 import rospy
 import os
+import traceback
 from flask import Blueprint, Flask, send_from_directory, current_app
 from app.lib import fileutil
 from app.exceptions import NoJsonException
@@ -24,6 +25,7 @@ def ros_launch_start():
     try:
         RosCommon().launch_start('test.launch')
     except Exception, e:
+        traceback.print_exc()
         return ResponseModel.error(e.message)
     return ResponseModel.ok('launch start')
 
@@ -33,6 +35,7 @@ def ros_record():
     try:
         RosCommon().record()
     except Exception, e:
+        traceback.print_exc()
         return ResponseModel.error(e.message)
     return ResponseModel.ok('ros record done!')
 
