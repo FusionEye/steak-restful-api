@@ -31,7 +31,6 @@ def ros_launch_start():
 @api.route('/record', methods=['GET'])
 def ros_record():
     try:
-        RosCommon().hokuyo_launch()
         RosCommon().record()
     except Exception, e:
         return ResponseModel.error(e.message)

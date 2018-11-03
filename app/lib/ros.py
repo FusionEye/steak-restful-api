@@ -53,8 +53,13 @@ class RosCommon:
 
     @staticmethod
     def hokuyo_launch():
-        args = ['roslaunch', 'spin_hokuyo', 'tilt_continuous.launch']
-        roslaunch.main(args)
+        package = 'spin_hokuyo'
+        launch_file = 'tilt_continuous.launch'
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+        launch_file = os.path.join(rospkg.RosPack().get_path(package), 'launch', launch_file)
+        launch = roslaunch.parent.ROSLaunchParent(uuid, [launch_file])
+        launch.start()
 
     @staticmethod
     def core_start():
