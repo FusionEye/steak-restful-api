@@ -84,7 +84,7 @@ def get_ros_bag_files(path):
     for file in files:
         file_path = os.path.join(path, file)
         if not os.path.isdir(file_path):
-            if os.path.splitext(file_path)[1] == '.bag':
+            if os.path.splitext(file_path)[1] == '.pcd':
                 result.append({
                     'fileName': file,
                     'path': file_path,

@@ -21,13 +21,13 @@ class RosCommon:
 
     def process_pcd_data(self, msg):
         pc = PointCloud.from_msg(msg)
-        pcd_file = '/data/' + time.strftime("%Y%m%d%H%M", time.localtime()) + '.pcd'
+        pcd_file = '/data/' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.pcd'
         if len(pc.pc_data) > 1000:
             pc.save(pcd_file, compression='ascii')
         # outmsg = pc.to_msg()
         # self.pub.publish(outmsg)
 
-    def record(self, topic='/hokuyo_points'):
+    def record(self, topic='/assembled_cloud'):
         rospy.Subscriber(topic, PointCloud2, self.process_pcd_data)
         # self.pub = rospy.Publisher('out_cloud', PointCloud2, self.process_pcd_data)
         rate = rospy.Rate(1)  # 10hz
