@@ -2,9 +2,14 @@
 import time
 import roslaunch
 import rospy
+import pypcd
+import logging
 from roslaunch.parent import ROSLaunchParent
 from sensor_msgs.msg import PointCloud2
 from pypcd import PointCloud
+
+
+log = logging.getLogger(__name__)
 
 
 class RosCommon:
@@ -13,19 +18,26 @@ class RosCommon:
         self.init_node = init_node
         if not self.init_node:
             rospy.init_node('listener', disable_signals=True, anonymous=True)
-            self.pub = rospy.Publisher('out_cloud', PointCloud2, queue_size=1)
 
-    def __del__(self):
-        if self.init_node:
-            rospy.signal_shutdown('ROS_Wait_For_Msg done')
+    @staticmethod
+    def process_pcd_data(msg):
+        message_cloud = PointCloud.from_msg(msg)
+        pcd_path = '/data/' + time.strftime("%Y%m%d%H%M", time.localtime()) + '.pcd'
 
-    def process_pcd_data(self, msg):
-        pc = PointCloud.from_msg(msg)
-        pcd_file = '/data/' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.pcd'
-        if len(pc.pc_data) > 1000:
-            pc.save(pcd_file, compression='ascii')
-        # outmsg = pc.to_msg()
-        # self.pub.publish(outmsg)
+        parent_cloud = {}
+        try:
+            parent_cloud = pypcd.point_cloud_from_path(pcd_path)
+        except Exception, ex:
+            import traceback
+            traceback.print_exc()
+            log.error(ex.message)
+
+        if len(parent_cloud) > 0:
+            # bigger cloud = a + b
+            parent_cloud = pypcd.cat_point_clouds(parent_cloud, message_cloud)
+            parent_cloud.save(pcd_path, compression='ascii')
+        else:
+            message_cloud.save(pcd_path, compression='ascii')
 
     def record(self, topic='/assembled_cloud'):
         rospy.Subscriber(topic, PointCloud2, self.process_pcd_data)
