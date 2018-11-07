@@ -4,7 +4,6 @@ import roslaunch
 import rospy
 import pypcd
 import logging
-import numpy as np
 from roslaunch.parent import ROSLaunchParent
 from sensor_msgs.msg import PointCloud2
 from pypcd import PointCloud
