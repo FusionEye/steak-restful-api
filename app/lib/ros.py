@@ -4,6 +4,7 @@ import roslaunch
 import rospy
 import pypcd
 import logging
+import numpy as np
 from roslaunch.parent import ROSLaunchParent
 from sensor_msgs.msg import PointCloud2
 from pypcd import PointCloud
@@ -24,7 +25,7 @@ class RosCommon:
         message_cloud = PointCloud.from_msg(msg)
         pcd_path = '/data/' + time.strftime("%Y%m%d%H%M", time.localtime()) + '.pcd'
 
-        parent_cloud = {}
+        parent_cloud = np.zeros((0, 3), dtype=np.float32)
         try:
             parent_cloud = pypcd.point_cloud_from_path(pcd_path)
         except Exception, ex:
