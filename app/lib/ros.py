@@ -35,9 +35,9 @@ class RosCommon:
         if len(parent_cloud) > 0:
             # bigger cloud = a + b
             parent_cloud = pypcd.cat_point_clouds(parent_cloud, message_cloud)
-            parent_cloud.save(pcd_path, compression='ascii')
+            parent_cloud.save(pcd_path)
         else:
-            message_cloud.save(pcd_path, compression='ascii')
+            message_cloud.save(pcd_path)
 
     def record(self, topic='/assembled_cloud'):
         rospy.Subscriber(topic, PointCloud2, self.process_pcd_data)
