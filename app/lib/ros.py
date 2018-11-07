@@ -25,20 +25,20 @@ class RosCommon:
         message_cloud = PointCloud.from_msg(msg)
         pcd_path = '/data/' + time.strftime("%Y%m%d%H%M", time.localtime()) + '.pcd'
 
-        parent_cloud = np.zeros((0, 3), dtype=np.float32)
         try:
             parent_cloud = pypcd.point_cloud_from_path(pcd_path)
         except Exception, ex:
             import traceback
             traceback.print_exc()
             log.error(ex.message)
+            message_cloud.save(pcd_path)
+            return
 
-        if len(parent_cloud) > 0:
+        if len(parent_cloud.pc_data) > 0:
+            log.info('Concatenate two point clouds into bigger point cloud')
             # bigger cloud = a + b
             parent_cloud = pypcd.cat_point_clouds(parent_cloud, message_cloud)
             parent_cloud.save(pcd_path)
-        else:
-            message_cloud.save(pcd_path)
 
     def record(self, topic='/assembled_cloud'):
         rospy.Subscriber(topic, PointCloud2, self.process_pcd_data)
