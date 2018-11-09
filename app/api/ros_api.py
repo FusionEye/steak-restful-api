@@ -4,7 +4,7 @@ import logging
 import rospy
 import os
 import traceback
-from flask import Blueprint, Flask, send_from_directory, current_app
+from flask import Blueprint, Flask, make_response, current_app, send_file
 from app.lib import fileutil
 from app.exceptions import NoJsonException
 from app.lib.ros import RosCommon
@@ -49,9 +49,17 @@ def ros_record_close():
 
 @api.route('/download/<filename>', methods=['GET', 'POST'])
 def download_ros_record_file(filename):
-    bag_dir = current_app.config.get('BAG_DIR')
-    dirpath = os.path.join(app.root_path, bag_dir)
-    return send_from_directory(dirpath, filename, as_attachment=True)
+    log.info("start download file: {}".format(filename))
+
+    try:
+        bag_dir = current_app.config.get('BAG_DIR')
+        file = os.path.join(app.root_path, bag_dir)
+        response = make_response(send_file(file))
+        response.headers["Content-Disposition"] = "attachment; filename={};".format(filename)
+        return response
+    except Exception, ex:
+        traceback.print_exc()
+        log.error(ex.message)
 
 
 @api.route('/list', methods=['GET', 'POST'])
