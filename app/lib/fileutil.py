@@ -80,7 +80,7 @@ def get_file_create_time(filePath):
 
 def get_ros_bag_files(path):
     files = os.listdir(path)
-    files.sort(key=lambda x:int(x[:-4]))
+    files.sort(key=lambda x: int(x[:-4]))
     result = []
     for file in files:
         file_path = os.path.join(path, file)
