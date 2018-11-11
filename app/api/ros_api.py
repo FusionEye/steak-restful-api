@@ -62,6 +62,20 @@ def download_ros_record_file(filename):
         log.error(ex.message)
 
 
+@api.route('/delete/<filename>', methods=['GET', 'POST'])
+def delete_ros_file(filename):
+    log.info("delete pcd file: {}".format(filename))
+    try:
+        bag_dir = current_app.config.get('BAG_DIR')
+        file = os.path.join(app.root_path, bag_dir) + filename
+        fileutil.delete(file)
+        return ResponseModel.ok('done')
+    except Exception, ex:
+        traceback.print_exc()
+        log.error(ex.message)
+        return ResponseModel.error(ex.message)
+
+
 @api.route('/list', methods=['GET', 'POST'])
 def get_record_files():
     bag_dir = current_app.config.get('BAG_DIR')
