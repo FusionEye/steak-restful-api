@@ -80,9 +80,9 @@ def get_file_create_time(filePath):
 
 def get_ros_bag_files(path):
     files = os.listdir(path)
+    files.sort(key=lambda x:int(x[:-4]))
     result = []
-    for i in range(0, len(files)):
-        file = files[i]
+    for file in files:
         file_path = os.path.join(path, file)
         if not os.path.isdir(file_path):
             if os.path.splitext(file_path)[1] == '.pcd':
