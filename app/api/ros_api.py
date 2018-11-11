@@ -53,7 +53,7 @@ def download_ros_record_file(filename):
 
     try:
         bag_dir = current_app.config.get('BAG_DIR')
-        file = os.path.join(app.root_path, bag_dir)
+        file = os.path.join(app.root_path, bag_dir) + filename
         response = make_response(send_file(file))
         response.headers["Content-Disposition"] = "attachment; filename={};".format(filename)
         return response
